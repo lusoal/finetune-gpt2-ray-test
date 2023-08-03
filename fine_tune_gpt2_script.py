@@ -5,6 +5,7 @@ import boto3
 import ray
 import wandb
 
+@ray.remote
 def download_file_from_s3(bucket_name, s3_file_name, local_file_name):
     try:
         s3_client = boto3.client('s3')
@@ -19,9 +20,10 @@ def download_file_from_s3(bucket_name, s3_file_name, local_file_name):
     except Exception as e:
         print(f"Error: {str(e)}")
 
+@ray.remote
 def fine_tune_gpt2(model_name, train_file, output_dir):
     # Load GPT-2 model and tokenizer
-    ray.init(num_cpus=20, num_gpus=2)
+    ray.init()
     model = GPT2LMHeadModel.from_pretrained(model_name)
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
 
