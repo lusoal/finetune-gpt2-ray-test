@@ -45,9 +45,7 @@ storage_path="s3://testing-fine-tuning-jakhs"
 # TBD: Get data from Amazon S3 instead of loading from local disk
 print("Loading tiny_shakespeare dataset")
 current_dataset = load_dataset("tiny_shakespeare")
-
-ray_datasets = ray.data.from_huggingface(current_dataset)
-
+ray_datasets = ray.data.from_huggingface(current_dataset['train'])
 block_size = 512
 
 
