@@ -55,6 +55,7 @@ def fine_tune_gpt2(model_name, train_file, output_dir):
     ray.shutdown()
     
 def main(api_key):
+    print(api_key)
     wandb.login(key=[api_key])
     output_file = "mental_health_data.txt"
     bucket_name = "testing-fine-tuning-jakhs"
@@ -71,4 +72,5 @@ if __name__ == "__main__":
         sys.exit(1)
 
     wandb_key = sys.argv[1]
+    print(wandb_key)
     main(wandb_key)
