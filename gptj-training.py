@@ -26,22 +26,21 @@ num_workers = 9
 cpus_per_worker = 8
 storage_path="s3://testing-fine-tuning-jakhs"
 
-ray.init(
-    runtime_env={
-        "pip": [
-            "datasets",
-            "evaluate",
-            # Latest combination of accelerate==0.19.0 and transformers==4.29.0
-            # seems to have issues with DeepSpeed process group initialization,
-            # and will result in a batch_size validation problem.
-            # TODO(jungong) : get rid of the pins once the issue is fixed.
-            "accelerate==0.16.0",
-            "transformers==4.26.0",
-            "torch>=1.12.0",
-            "deepspeed==0.9.2",
-        ]
-    }
-)
+# ray.init(
+#     runtime_env={
+#         "pip": [
+#             "datasets",
+#             "evaluate",
+#             # Latest combination of accelerate==0.19.0 and transformers==4.29.0
+#             # seems to have issues with DeepSpeed process group initialization,
+#             # and will result in a batch_size validation problem.
+#             "accelerate==0.16.0",
+#             "transformers==4.26.0",
+#             "torch>=1.12.0",
+#             "deepspeed==0.9.2",
+#         ]
+#     }
+# )
 
 # TBD: Get data from Amazon S3 instead of loading from local disk
 print("Loading tiny_shakespeare dataset")
