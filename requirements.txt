@@ -13,4 +13,4 @@ torch==2.0.1
 bitsandbytes
 mlflow==2.4.1
 boto3
-ray[air]==2.5.0
+ray[air]
