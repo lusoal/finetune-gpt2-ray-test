@@ -54,8 +54,8 @@ def fine_tune_gpt2(model_name, train_file, output_dir):
     tokenizer.save_pretrained(output_dir)
     ray.shutdown()
     
-def main(key):
-    wandb.login(key=key)
+def main(api_key):
+    wandb.login(key=[api_key])
     output_file = "mental_health_data.txt"
     bucket_name = "testing-fine-tuning-jakhs"
     cluster_storage = "/mnt/cluster_storage"
