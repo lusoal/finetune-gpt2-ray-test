@@ -3,6 +3,7 @@ from transformers import TextDataset, DataCollatorForLanguageModeling
 from transformers import Trainer, TrainingArguments
 import boto3
 import ray
+import wandb
 
 def download_file_from_s3(bucket_name, s3_file_name, local_file_name):
     try:
@@ -53,13 +54,21 @@ def fine_tune_gpt2(model_name, train_file, output_dir):
     tokenizer.save_pretrained(output_dir)
     ray.shutdown()
     
-def main():
+def main(key):
+    wandb.login(key=key)
     output_file = "mental_health_data.txt"
     bucket_name = "testing-fine-tuning-jakhs"
     cluster_storage = "/mnt/cluster_storage"
-    
+
     local_file_path = download_file_from_s3(bucket_name, f"output/{output_file}", f"{cluster_storage}/{output_file}")
     fine_tune_gpt2("gpt2", local_file_path, cluster_storage)
-    
+
 if __name__ == "__main__":
-    main()
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python script.py <wandb_key>")
+        sys.exit(1)
+
+    wandb_key = sys.argv[1]
+    main(wandb_key)
