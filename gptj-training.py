@@ -26,26 +26,30 @@ num_workers = 9
 cpus_per_worker = 8
 storage_path="s3://testing-fine-tuning-jakhs"
 
-# ray.init(
-#     runtime_env={
-#         "pip": [
-#             "datasets",
-#             "evaluate",
-#             # Latest combination of accelerate==0.19.0 and transformers==4.29.0
-#             # seems to have issues with DeepSpeed process group initialization,
-#             # and will result in a batch_size validation problem.
-#             "accelerate==0.16.0",
-#             "transformers==4.26.0",
-#             "torch>=1.12.0",
-#             "deepspeed==0.9.2",
-#         ]
-#     }
-# )
+ray.init(
+    runtime_env={
+        "pip": [
+            "datasets",
+            "evaluate",
+            # Latest combination of accelerate==0.19.0 and transformers==4.29.0
+            # seems to have issues with DeepSpeed process group initialization,
+            # and will result in a batch_size validation problem.
+            "accelerate==0.16.0",
+            "transformers==4.26.0",
+            "torch>=1.12.0",
+            "deepspeed==0.9.2",
+        ]
+    }
+)
 
 # TBD: Get data from Amazon S3 instead of loading from local disk
 print("Loading tiny_shakespeare dataset")
-ray_datasets = load_dataset("tiny_shakespeare")
-# ray_datasets = ray.data.from_huggingface(current_dataset)
+
+current_dataset = load_dataset("tiny_shakespeare")
+ray_datasets_train = ray.data.from_huggingface(current_dataset['train'])
+ray_datasets_validation = ray.data.from_huggingface(current_dataset['validation'])
+ray_datasets_test = ray.data.from_huggingface(current_dataset['test'])
+
 block_size = 512
 
 
@@ -192,7 +196,7 @@ trainer = TransformersTrainer(
         use_gpu=use_gpu,
         resources_per_worker={"GPU": 1, "CPU": cpus_per_worker},
     ),
-    datasets={"train": ray_datasets["train"], "evaluation": ray_datasets["validation"]},
+    datasets={"train": ray_datasets_train, "evaluation": ray_datasets_validation},
     preprocessor=Chain(splitter, tokenizer),
     run_config=RunConfig(storage_path=storage_path),
 )
