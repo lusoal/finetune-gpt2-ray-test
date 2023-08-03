@@ -42,6 +42,9 @@ ray.init(
     }
 )
 
+# Testing ray Autoscaling
+ray.autoscaler.sdk.request_resources(num_cpus=72)
+
 # TBD: Get data from Amazon S3 instead of loading from local disk
 print("Loading tiny_shakespeare dataset")
 
