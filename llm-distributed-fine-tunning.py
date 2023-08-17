@@ -161,7 +161,7 @@ def prepare_batch_mapper(model_id):
 
 if __name__ == "__main__":
     # CONSTANTS
-    bucket_name = "testing-fine-tuning-jakhs"
+    bucket_name = "testing-fine-tuning-jakhs2"
     s3_file_name = "input/alpaca_data_cleaned.json"
     local_file_name = "/mnt/cluster_storage/alpaca_data_cleaned.json"
     
